@@ -10,7 +10,7 @@ import br.com.klima.configs.TestConfigs;
 import br.com.klima.integrationtests.testcontainers.AbstractIntegrationTest;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
-public class PersonControllerJsonTest extends AbstractIntegrationTest{
+public class SwaggerIntegrationTest extends AbstractIntegrationTest{
 
 	@Test
 	public void shouldDisplaySwaggerUiPage() {
@@ -25,6 +25,8 @@ public class PersonControllerJsonTest extends AbstractIntegrationTest{
 				.extract()
 					.body()
 						.asString();
+		
+		System.out.println(content);
 		
 		assertTrue(content.contains("Swagger UI"));
 	}

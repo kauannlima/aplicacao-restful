@@ -43,7 +43,7 @@ public class JwtTokenProvider {
 		secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
 		algorithm = Algorithm.HMAC256(secretKey.getBytes());
 	}
-
+	
 	public TokenVO createAccessToken(String username, List<String> roles) {
 		Date now = new Date();
 		Date validity = new Date(now.getTime() + validityInMilliseconds);
@@ -52,8 +52,7 @@ public class JwtTokenProvider {
 		
 		return new TokenVO(username, true, now, validity, accessToken, refreshToken);
 	}
-
-	
+		
 	public TokenVO refreshToken(String refreshToken) {
 		if (refreshToken.contains("Bearer ")) refreshToken =
 				refreshToken.substring("Bearer ".length());
