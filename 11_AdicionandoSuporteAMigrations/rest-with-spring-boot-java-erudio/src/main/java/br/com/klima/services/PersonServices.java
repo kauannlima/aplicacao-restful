@@ -16,6 +16,7 @@ import br.com.klima.exceptions.ResourceNotFoundException;
 import br.com.klima.mapper.DozerMapper;
 import br.com.klima.model.Person;
 import br.com.klima.repositories.PersonRepository;
+import jakarta.transaction.Transactional;
 
 @Service
 public class PersonServices {
@@ -73,6 +74,19 @@ public class PersonServices {
 		var vo =  DozerMapper.parseObject(repository.save(entity), PersonVO.class);
 		vo.add(linkTo(methodOn(PersonController.class).findById(vo.getKey())).withSelfRel());
 		return vo;
+	}
+	
+	@Transactional
+	public PersonVO disablePerson(Long id) {
+		
+		logger.info("Disabling one person!");
+		repository.disablePerson(id);
+
+		var entity = repository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("No records found for this ID!"));
+			var vo =  DozerMapper.parseObject(entity, PersonVO.class);
+			vo.add(linkTo(methodOn(PersonController.class).findById(id)).withSelfRel());
+			return vo;
 	}
 	
 	public void delete(Long id) {
