@@ -7,8 +7,11 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.stereotype.Service;
 
 import br.com.klima.controllers.PersonController;
@@ -27,12 +30,15 @@ public class PersonServices {
 	
 	@Autowired
 	PersonRepository repository;
+	
+	@Autowired
+	PagedResourcesAssembler<PersonVO> assembler;
 
-	public Page<PersonVO> findAll(Pageable pageable) {
+	public PagedModel<EntityModel<PersonVO>>findPersonByName(String firstname, Pageable pageable) {
 
-		logger.info("Finding all people!");
+		logger.info("Finding all people by firstname!");
 		
-		var personPage = repository.findAll(pageable);
+		var personPage = repository.findPersonByName(firstname, pageable);
 		
 		var persoVosPage = personPage.map(p -> DozerMapper.parseObject(p, PersonVO.class));
 		persoVosPage.map(
@@ -41,7 +47,35 @@ public class PersonServices {
 						.findById(p.getKey())).withSelfRel()));
 
 
-		return persoVosPage;
+		Link link = linkTo(
+				methodOn(PersonController.class)
+				.findAll(pageable.getPageNumber(), 
+						pageable.getPageSize(), 
+						"asc")).withSelfRel();
+		
+		return assembler.toModel(persoVosPage, link);
+	}
+	
+	public PagedModel<EntityModel<PersonVO>>findAll(Pageable pageable) {
+		
+		logger.info("Finding all people!");
+		
+		var personPage = repository.findAll(pageable);
+		
+		var persoVosPage = personPage.map(p -> DozerMapper.parseObject(p, PersonVO.class));
+		persoVosPage.map(
+				p -> p.add(
+						linkTo(methodOn(PersonController.class)
+								.findById(p.getKey())).withSelfRel()));
+		
+		
+		Link link = linkTo(
+				methodOn(PersonController.class)
+				.findAll(pageable.getPageNumber(), 
+						pageable.getPageSize(), 
+						"asc")).withSelfRel();
+		
+		return assembler.toModel(persoVosPage, link);
 	}
 
 	public PersonVO findById(Long id) {
