@@ -6,9 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.Arrays;
-import java.util.List;
-
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
@@ -24,6 +21,7 @@ import br.com.klima.configs.integrationtests.controller.withyaml.mapper.YMLMappe
 import br.com.klima.configs.integrationtests.vo.AccountCredentialsVO;
 import br.com.klima.configs.integrationtests.vo.PersonVO;
 import br.com.klima.configs.integrationtests.vo.TokenVO;
+import br.com.klima.configs.integrationtests.vo.pagedmodels.PagedModelPerson;
 import br.com.klima.integrationtests.testcontainers.AbstractIntegrationTest;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.config.EncoderConfig;
@@ -279,10 +277,10 @@ public class PersonControllerYamlTest extends AbstractIntegrationTest{
 	}
 	
 	@Test
-	@Order(6)
+	@Order(7)
 	public void testFindAll() throws JsonMappingException, JsonProcessingException {
 						
-		var content = given().spec(specification)
+		var wrapper = given().spec(specification)
 				.config(
 						RestAssuredConfig
 							.config()
@@ -292,48 +290,36 @@ public class PersonControllerYamlTest extends AbstractIntegrationTest{
 										ContentType.TEXT)))
 				.contentType(TestConfigs.CONTENT_TYPE_YML)
 				.accept(TestConfigs.CONTENT_TYPE_YML)
+				.pathParam("firstName","ayr")
+				.queryParams("page",0,"size", 6,"direction","asc")
 					.when()
-					.get()
+					.get("/findPersonByName/{firstName}")
 				.then()
 					.statusCode(200)
 				.extract()
 				.body()
-				.as(PersonVO[].class, objectMapper);
+				.as(PagedModelPerson.class, objectMapper);
 
-		List<PersonVO> people = Arrays.asList(content);
+		var people = wrapper.getContent();
+		
 		PersonVO foundPersonOne = people.get(0);
-	
+		
 		assertNotNull(foundPersonOne.getId());
 		assertNotNull(foundPersonOne.getFirstName());
 		assertNotNull(foundPersonOne.getLastName());
 		assertNotNull(foundPersonOne.getAddress());
 		assertNotNull(foundPersonOne.getGender());
-		assertTrue(foundPersonOne.getEnabled());
 		
-		assertEquals(1 , foundPersonOne.getId());
+		assertEquals(1, foundPersonOne.getId());
 		assertEquals("Ayrton",foundPersonOne.getFirstName());
 		assertEquals("Senna",foundPersonOne.getLastName());
 		assertEquals("São Paulo",foundPersonOne.getAddress());
 		assertEquals("Male",foundPersonOne.getGender());
-		
-		PersonVO foundPersonSix = people.get(5);
-		
-		assertNotNull(foundPersonSix.getId());
-		assertNotNull(foundPersonSix.getFirstName());
-		assertNotNull(foundPersonSix.getLastName());
-		assertNotNull(foundPersonSix.getAddress());
-		assertNotNull(foundPersonSix.getGender());
-		assertTrue(foundPersonSix.getEnabled());
-		
-		assertEquals(9 , foundPersonSix.getId());
-		assertEquals("Nelson",foundPersonSix.getFirstName());
-		assertEquals("Mvezo",foundPersonSix.getLastName());
-		assertEquals("Mvezo - South Africa",foundPersonSix.getAddress());
-		assertEquals("Male",foundPersonSix.getGender());
+		assertTrue(foundPersonOne.getEnabled());
 	}
 	
 	@Test
-	@Order(7)
+	@Order(8)
 	public void testFindAllWithoutToken() throws JsonMappingException, JsonProcessingException {
 						
 		RequestSpecification specificationWithoutToken = new RequestSpecBuilder()

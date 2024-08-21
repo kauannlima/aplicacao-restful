@@ -1,14 +1,11 @@
 package br.com.klima.configs.integrationtests.controller.withyaml;
 
 import static io.restassured.RestAssured.given;
-import static org.junit.Assert.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
@@ -18,17 +15,14 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import br.com.klima.configs.TestConfigs;
 import br.com.klima.configs.integrationtests.controller.withyaml.mapper.YMLMapper;
 import br.com.klima.configs.integrationtests.vo.AccountCredentialsVO;
 import br.com.klima.configs.integrationtests.vo.BookVO;
-import br.com.klima.configs.integrationtests.vo.PersonVO;
 import br.com.klima.configs.integrationtests.vo.TokenVO;
+import br.com.klima.configs.integrationtests.vo.pagedmodels.PagedModelBook;
 import br.com.klima.integrationtests.testcontainers.AbstractIntegrationTest;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.config.EncoderConfig;
@@ -237,7 +231,7 @@ public class BookControllerYamlTest extends AbstractIntegrationTest{
 	@Order(5)
 	public void testFindAll() throws JsonMappingException, JsonProcessingException {
 						
-		var content = given().spec(specification)
+		var wrapper = given().spec(specification)
 				.config(
 						RestAssuredConfig
 							.config()
@@ -247,26 +241,28 @@ public class BookControllerYamlTest extends AbstractIntegrationTest{
 										ContentType.TEXT)))
 				.contentType(TestConfigs.CONTENT_TYPE_YML)
 				.accept(TestConfigs.CONTENT_TYPE_YML)
+				.queryParams("page",0,"size", 10,"direction","asc")
 					.when()
 					.get()
 				.then()
 					.statusCode(200)
 				.extract()
 				.body()
-				.as(BookVO[].class, objectMapper);
+				.as(PagedModelBook.class, objectMapper);
 		
-		List<BookVO> book = Arrays.asList(content);
+		var book = wrapper.getContent();
+		
 		BookVO foundBookOne = book.get(0);
-
-	
+		
 		assertNotNull(foundBookOne.getId());
 		assertNotNull(foundBookOne.getAuthor());
 		assertNotNull(foundBookOne.getPrice());
 		assertNotNull(foundBookOne.getTitle());
 		
-		assertEquals("Michael C. Feathers",foundBookOne.getAuthor());
-		assertEquals(Double.valueOf(49.0),foundBookOne.getPrice());
-		assertEquals("Working effectively with legacy code",foundBookOne.getTitle());
+		assertEquals(12, foundBookOne.getId());
+		assertEquals("Viktor Mayer-Schonberger e Kenneth Kukier",foundBookOne.getAuthor());
+		assertEquals(Double.valueOf(54.0),foundBookOne.getPrice());
+		assertEquals("Big Data: como extrair volume, variedade, velocidade e valor da avalanche de informação cotidiana",foundBookOne.getTitle());
 		
 		
 		BookVO foundBookSix = book.get(5);
@@ -277,10 +273,10 @@ public class BookControllerYamlTest extends AbstractIntegrationTest{
 		assertNotNull(foundBookSix.getTitle());
 
 		
-		assertEquals(6 , foundBookSix.getId());
-		assertEquals("Martin Fowler e Kent Beck",foundBookOne.getAuthor());
-		assertEquals(Double.valueOf(88.0),foundBookOne.getPrice());
-		assertEquals("Refactoring",foundBookOne.getTitle());
+		assertEquals(11 , foundBookSix.getId());
+		assertEquals("Roger S. Pressman",foundBookSix.getAuthor());
+		assertEquals(Double.valueOf(56.0),foundBookSix.getPrice());
+		assertEquals("Engenharia de Software: uma abordagem profissional",foundBookSix.getTitle());
 	}
 	
 	@Test
