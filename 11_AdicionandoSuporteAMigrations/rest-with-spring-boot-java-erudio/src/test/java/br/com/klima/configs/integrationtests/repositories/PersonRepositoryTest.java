@@ -2,7 +2,8 @@ package br.com.klima.configs.integrationtests.repositories;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse; 
+import static org.junit.jupiter.api.Assertions.assertTrue; 
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
@@ -56,6 +57,32 @@ public class PersonRepositoryTest extends AbstractIntegrationTest{
 		assertNotNull(person.getGender());
 		
 		assertTrue(person.getEnabled());
+		
+		assertEquals(1, person.getId());
+		
+		assertEquals("Ayrton",person.getFirstName());
+		assertEquals("Senna",person.getLastName());
+		assertEquals("São Paulo",person.getAddress());
+		assertEquals("Male",person.getGender());
+
+	}
+	
+	@Test
+	@Order(1)
+	public void testDisable() throws JsonMappingException, JsonProcessingException {
+	
+		repository.disablePerson(person.getId());
+		
+		Pageable pageable = PageRequest.of(0,10, Sort.by(Direction.ASC,"firstName"));
+		person = repository.findPersonByName("ayr", pageable ).getContent().get(0);
+		
+		assertNotNull(person.getId());
+		assertNotNull(person.getFirstName());
+		assertNotNull(person.getLastName());
+		assertNotNull(person.getAddress());
+		assertNotNull(person.getGender());
+		
+		assertFalse(person.getEnabled());
 		
 		assertEquals(1, person.getId());
 		

@@ -277,8 +277,62 @@ public class PersonControllerYamlTest extends AbstractIntegrationTest{
 	}
 	
 	@Test
-	@Order(7)
+	@Order(6)
 	public void testFindAll() throws JsonMappingException, JsonProcessingException {
+		
+		var wrapper = given().spec(specification)
+				.config(
+						RestAssuredConfig
+						.config()
+						.encoderConfig(EncoderConfig.encoderConfig()
+								.encodeContentTypeAs(
+										TestConfigs.CONTENT_TYPE_YML, 
+										ContentType.TEXT)))
+				.contentType(TestConfigs.CONTENT_TYPE_YML)
+				.accept(TestConfigs.CONTENT_TYPE_YML)
+				.queryParams("page",3,"size", 10,"direction","asc")
+				.when()
+				.get()
+			.then()
+				.statusCode(200)
+			.extract()
+			.body()
+				.as(PagedModelPerson.class, objectMapper);
+		
+		var people = wrapper.getContent();
+		
+		PersonVO foundPersonOne = people.get(0);
+		
+		assertNotNull(foundPersonOne.getId());
+		assertNotNull(foundPersonOne.getFirstName());
+		assertNotNull(foundPersonOne.getLastName());
+		assertNotNull(foundPersonOne.getAddress());
+		assertNotNull(foundPersonOne.getGender());
+		
+		assertEquals(957, foundPersonOne.getId());
+		assertEquals("Allen",foundPersonOne.getFirstName());
+		assertEquals("Pinsent",foundPersonOne.getLastName());
+		assertEquals("9973 Forest Run Crossing",foundPersonOne.getAddress());
+		assertEquals("Male",foundPersonOne.getGender());
+		
+		PersonVO foundPersonSix = people.get(5);
+		
+		assertNotNull(foundPersonSix.getId());
+		assertNotNull(foundPersonSix.getFirstName());
+		assertNotNull(foundPersonSix.getLastName());
+		assertNotNull(foundPersonSix.getAddress());
+		assertNotNull(foundPersonSix.getGender());
+		
+		assertEquals(155 , foundPersonSix.getId());
+		assertEquals("Allyn",foundPersonSix.getFirstName());
+		assertEquals("Haffner",foundPersonSix.getLastName());
+		assertEquals("0657 Karstens Road",foundPersonSix.getAddress());
+		assertEquals("Female",foundPersonSix.getGender());
+	}
+	
+	@Test
+	@Order(7)
+	public void testFindByName() throws JsonMappingException, JsonProcessingException {
 						
 		var wrapper = given().spec(specification)
 				.config(
@@ -343,6 +397,47 @@ public class PersonControllerYamlTest extends AbstractIntegrationTest{
 					.get()
 				.then()
 					.statusCode(403);
+	}
+	
+	@Test
+	@Order(9)
+	public void testHATEOAS() throws JsonMappingException, JsonProcessingException {
+						
+		var unthreatedContent = given().spec(specification)
+				.config(
+						RestAssuredConfig
+							.config()
+							.encoderConfig(EncoderConfig.encoderConfig()
+								.encodeContentTypeAs(
+									TestConfigs.CONTENT_TYPE_YML,
+									ContentType.TEXT)))
+				.contentType(TestConfigs.CONTENT_TYPE_YML)
+				.accept(TestConfigs.CONTENT_TYPE_YML)
+				.queryParams("page", 3, "size", 10, "direction", "asc")
+				.when()
+					.get()
+				.then()
+					.statusCode(200)
+						.extract()
+						.body()
+						.asString();
+		
+		var content = unthreatedContent.replace("\n", "").replace("\r", "");
+		
+
+		assertTrue(content.contains("\"http://localhost:8888/api/person/v1/155\""));
+		assertTrue(content.contains("\"http://localhost:8888/api/person/v1/272\""));
+		
+		assertTrue(content.contains("href: \"http://localhost:8888/api/person/v1?direction=asc&page=0&size=10&sort=firstName,asc\""));
+		assertTrue(content.contains("href: \"http://localhost:8888/api/person/v1?direction=asc&page=2&size=10&sort=firstName,asc\""));
+		assertTrue(content.contains("href: \"http://localhost:8888/api/person/v1?page=3&size=10&direction=asc\""));
+		assertTrue(content.contains("href: \"http://localhost:8888/api/person/v1?direction=asc&page=4&size=10&sort=firstName,asc\""));
+		assertTrue(content.contains("href: \"http://localhost:8888/api/person/v1?direction=asc&page=100&size=10&sort=firstName,asc\""));
+
+				
+		
+		//assertTrue(content.contains("page:  size: 10  totalElements: 1007  totalPages: 101  number: 3"));
+	
 	}
 	
 	private void mockPerson() {
