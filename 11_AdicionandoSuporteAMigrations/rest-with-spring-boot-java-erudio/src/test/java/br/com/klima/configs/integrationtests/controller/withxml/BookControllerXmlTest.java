@@ -260,6 +260,37 @@ public class BookControllerXmlTest extends AbstractIntegrationTest{
 					.statusCode(403);
 	}
 	
+	@Test
+	@Order(7)
+	public void testHATEOAS() throws JsonMappingException, JsonProcessingException {
+						
+		var content = given().spec(specification)
+				.contentType(TestConfigs.CONTENT_TYPE_XML)
+				.accept(TestConfigs.CONTENT_TYPE_XML)
+				.queryParams("page",0,"size", 10,"direction","asc")
+					.when()
+					.get()
+				.then()
+					.statusCode(200)
+				.extract()
+					.body()
+					.asString();
+
+		assertTrue(content.contains("<href>http://localhost:8888/api/book/v1/12</href></links>"));
+		assertTrue(content.contains("<href>http://localhost:8888/api/book/v1/3</href></links>"));
+		assertTrue(content.contains("<href>http://localhost:8888/api/book/v1/5</href></links>"));
+		
+		
+		assertTrue(content.contains("first</rel><href>http://localhost:8888/api/book/v1?direction=asc&amp;page=0&amp;size=10&amp;sort=title,asc"));
+		assertTrue(content.contains("self</rel><href>http://localhost:8888/api/book/v1?page=0&amp;size=10&amp;direction=asc"));
+		assertTrue(content.contains("next</rel><href>http://localhost:8888/api/book/v1?direction=asc&amp;page=1&amp;size=10&amp;sort=title,asc"));
+		assertTrue(content.contains("last</rel><href>http://localhost:8888/api/book/v1?direction=asc&amp;page=1&amp;size=10&amp;sort=title,asc"));
+
+		
+		assertTrue(content.contains("<page><size>10</size><totalElements>15</totalElements><totalPages>2</totalPages><number>0</number></page></PagedModel>"));
+	
+	}
+	
 	private void mockBook() {
 		book.setAuthor("Michael C. Feathers");
 		book.setLaunchDate(new Date());

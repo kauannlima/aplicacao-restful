@@ -306,6 +306,49 @@ public class BookControllerYamlTest extends AbstractIntegrationTest{
 					.statusCode(403);
 	}
 	
+	@Test
+	@Order(7)
+	public void testHATEOAS() throws JsonMappingException, JsonProcessingException {
+						
+		var unthreatedContent = given().spec(specification)
+				.config(
+						RestAssuredConfig
+							.config()
+							.encoderConfig(EncoderConfig.encoderConfig()
+								.encodeContentTypeAs(
+									TestConfigs.CONTENT_TYPE_YML,
+									ContentType.TEXT)))
+				.contentType(TestConfigs.CONTENT_TYPE_YML)
+				.accept(TestConfigs.CONTENT_TYPE_YML)
+				.queryParams("page",0,"size", 10,"direction","asc")
+				.when()
+				.get()
+			.then()
+				.statusCode(200)
+					.extract()
+					.body()
+					.asString();
+		
+		var content = unthreatedContent.replace("\n", "").replace("\r", "");
+
+		assertTrue(content.contains("\"http://localhost:8888/api/book/v1/12\""));
+		assertTrue(content.contains("\"http://localhost:8888/api/book/v1/3\""));
+		assertTrue(content.contains("\"http://localhost:8888/api/book/v1/5\""));
+		
+		
+		assertTrue(content.contains("href: \"http://localhost:8888/api/book/v1?direction=asc&page=0&size=10&sort=title,asc\""));
+		assertTrue(content.contains("href: \"http://localhost:8888/api/book/v1?page=0&size=10&direction=asc\""));
+		assertTrue(content.contains("href: \"http://localhost:8888/api/book/v1?direction=asc&page=1&size=10&sort=title,asc\""));
+		assertTrue(content.contains("href: \"http://localhost:8888/api/book/v1?direction=asc&page=1&size=10&sort=title,asc\""));
+
+		
+		assertTrue(content.contains("page:"
+				+ "  size: 10"
+				+ "  totalElements: 15"
+				+ "  totalPages: 2"
+				+ "  number: 0"));
+	
+	}
 	private void mockBook() {
 		book.setAuthor("Michael C. Feathers");
 		book.setLaunchDate(new Date());

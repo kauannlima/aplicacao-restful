@@ -23,9 +23,12 @@ import br.com.klima.configs.integrationtests.vo.TokenVO;
 import br.com.klima.integrationtests.testcontainers.AbstractIntegrationTest;
 import br.com.klima.unittests.mapper.mocks.MockPerson;
 import io.restassured.builder.RequestSpecBuilder;
+import io.restassured.config.EncoderConfig;
+import io.restassured.config.RestAssuredConfig;
 import io.restassured.filter.log.LogDetail;
 import io.restassured.filter.log.RequestLoggingFilter;
 import io.restassured.filter.log.ResponseLoggingFilter;
+import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
@@ -187,6 +190,19 @@ public class PersonControllerCorsJsonTest extends AbstractIntegrationTest{
 				
 		assertNotNull(content);
 		assertEquals("Invalid CORS request",content);
+	}
+	
+	@Test
+	@Order(5)
+	public void testDelete() throws JsonMappingException, JsonProcessingException {
+			
+		given().spec(specification)
+		.contentType(TestConfigs.CONTENT_TYPE_JSON)
+					.pathParam("id", person.getId())
+					.when()
+					.delete("{id}")
+				.then()
+					.statusCode(204);	
 	}
 	
 	private void mockPerson() {
