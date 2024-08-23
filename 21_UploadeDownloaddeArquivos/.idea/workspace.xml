@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="f8bb9ed1-2dcd-4a43-ac6e-1f8c6129e933" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/../11_AdicionandoSuporteAMigrations/rest-with-spring-boot-java-erudio/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../11_AdicionandoSuporteAMigrations/rest-with-spring-boot-java-erudio/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../11_AdicionandoSuporteAMigrations/rest-with-spring-boot-java-erudio/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../11_AdicionandoSuporteAMigrations/rest-with-spring-boot-java-erudio/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../11_AdicionandoSuporteAMigrations/rest-with-spring-boot-java-erudio/src/test/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../11_AdicionandoSuporteAMigrations/rest-with-spring-boot-java-erudio/src/test/resources/application.yml" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "kauannlima"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/kauannlima/aplicacao-restful.git",
+    "accountId": "66fd2f1d-78d1-4143-96e4-f742d8a107ea"
+  }
+}]]></component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "customColor": "",
+  "associatedIndex": 4
+}]]></component>
+  <component name="ProjectId" id="2l2OiqfU25MbQjX9k7t20RRN9FB" />
+  <component name="ProjectViewState">
+    <option name="abbreviatePackageNames" value="true" />
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+    <option name="showVisibilityIcons" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "master",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "D:/Programação/Projetos/rest-with-spring-boot-java-erudio/21_UploadeDownloaddeArquivos"
+  }
+}]]></component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="f8bb9ed1-2dcd-4a43-ac6e-1f8c6129e933" name="Changes" comment="" />
+      <created>1724374834831</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1724374834831</updated>
+    </task>
+    <servers />
+  </component>
+</project>
