@@ -24,3 +24,5 @@ Esta aplicação foi desenvolvida para fins de estudo, com base em um curso de J
 ## Estrutura do Repositório
 
 Cada pasta deste repositório contém diferentes módulos do curso, sendo cada um mais atualizado em relação à aplicação.
+
+[![Docker Hub Repo](https://img.shields.io/docker/pulls/klima1405/rest-with-spring-boot-erudio.svg)](https://hub.docker.com/repository/docker/klima1405/rest-with-spring-boot-erudio)
