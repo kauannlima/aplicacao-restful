@@ -1,4 +1,5 @@
 # Aplicação de Estudo - Java REST API
+[![Docker Hub Repo](https://img.shields.io/docker/pulls/klima1405/rest-with-spring-boot-erudio.svg)](https://hub.docker.com/repository/docker/klima1405/rest-with-spring-boot-erudio)
 
 Esta aplicação foi desenvolvida para fins de estudo, com base em um curso de Java REST API, utilizando as seguintes tecnologias:
 
@@ -25,4 +26,3 @@ Esta aplicação foi desenvolvida para fins de estudo, com base em um curso de J
 
 Cada pasta deste repositório contém diferentes módulos do curso, sendo cada um mais atualizado em relação à aplicação.
 
-[![Docker Hub Repo](https://img.shields.io/docker/pulls/klima1405/rest-with-spring-boot-erudio.svg)](https://hub.docker.com/repository/docker/klima1405/rest-with-spring-boot-erudio)
