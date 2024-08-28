@@ -3,7 +3,7 @@ server:
 cors:
  originPatterns: http://localhost:3000,https://erudio.com.br,https://klima.com.br
 file:
-  upload-dir: /Programação/Projetos/rest-with-spring-boot-java-erudio/UploadDir
+  upload-dir: /home/runner/work/aplicacao-restful/UploadDir
 security:
    jwt:
     token:
