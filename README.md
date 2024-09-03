@@ -6,7 +6,7 @@ Esta aplicação foi desenvolvida para fins de estudo, com base em um curso de J
 ## Tecnologias Utilizadas
 
 - **Spring Boot 3**
-- **Java 18**
+- **Java 17**
 - **Conceitos Arquiteturais de REST/RESTful**
 - **Migrations com Flyway**
 - **Postman**
